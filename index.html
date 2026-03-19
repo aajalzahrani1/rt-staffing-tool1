@@ -1,0 +1,950 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>RT Staffing Tool</title>
+<style>
+  :root{
+    --bg:#eef4fb;
+    --surface:#ffffff;
+    --surface-2:#f8fbff;
+    --text:#15202b;
+    --muted:#6b778c;
+    --line:#e3ebf5;
+    --primary:#0e5ea8;
+    --primary-2:#2f7fd3;
+    --green:#14b86a;
+    --violet:#7c4dff;
+    --orange:#ff8a3d;
+    --danger:#e4535f;
+    --shadow:0 18px 38px rgba(18, 58, 102, .10);
+  }
+  *{box-sizing:border-box}
+  body{
+    margin:0;
+    font-family:Arial, Helvetica, sans-serif;
+    background:linear-gradient(180deg,#f7fbff 0%, #eef4fb 100%);
+    color:var(--text);
+  }
+  .app{
+    max-width:480px;
+    margin:0 auto;
+    min-height:100vh;
+    padding:14px 14px 92px;
+  }
+  .screen{display:none}
+  .screen.active{display:block}
+  .hero{
+    background:
+      radial-gradient(circle at top right, rgba(255,255,255,.18), transparent 28%),
+      linear-gradient(135deg, var(--primary) 0%, var(--primary-2) 100%);
+    color:#fff;
+    padding:22px 18px 24px;
+    border-radius:28px;
+    box-shadow:0 20px 45px rgba(16,24,40,.12);
+    margin-bottom:16px;
+  }
+  .topline{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    margin-bottom:14px;
+    gap:12px;
+  }
+  .brand{
+    display:flex;
+    align-items:center;
+    gap:12px;
+  }
+  .appmark{
+    width:48px;
+    height:48px;
+    border-radius:16px;
+    background:rgba(255,255,255,.16);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:24px;
+    flex:0 0 auto;
+  }
+  .soft{
+    font-size:12px;
+    color:rgba(255,255,255,.82);
+    letter-spacing:.03em;
+  }
+  .hero h1{
+    margin:4px 0 8px;
+    font-size:28px;
+    line-height:1.12;
+  }
+  .hero p{
+    margin:0;
+    font-size:13px;
+    line-height:1.55;
+    color:rgba(255,255,255,.90);
+  }
+  .tag{
+    padding:8px 12px;
+    border-radius:999px;
+    background:rgba(255,255,255,.14);
+    border:1px solid rgba(255,255,255,.16);
+    font-size:11px;
+    font-weight:700;
+    color:#fff;
+    white-space:nowrap;
+  }
+  .floating-cards{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:12px;
+    margin-top:-24px;
+    margin-bottom:10px;
+    padding:0 4px;
+  }
+  .quick{
+    background:var(--surface);
+    border:1px solid rgba(255,255,255,.85);
+    border-radius:24px;
+    padding:16px;
+    box-shadow:var(--shadow);
+    cursor:pointer;
+  }
+  .quick .icon{
+    width:44px;
+    height:44px;
+    border-radius:15px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    color:#fff;
+    font-size:22px;
+    margin-bottom:10px;
+  }
+  .blue{background:linear-gradient(135deg,var(--primary),var(--primary-2))}
+  .green{background:linear-gradient(135deg,#12b96b,#2fd18b)}
+  .violet{background:linear-gradient(135deg,#7c4dff,#9c7cff)}
+  .orange{background:linear-gradient(135deg,#ff8a3d,#ffb16e)}
+  .quick h3{margin:0 0 4px;font-size:16px}
+  .quick p{margin:0;font-size:12px;color:var(--muted);line-height:1.45}
+  .card{
+    background:var(--surface);
+    border:1px solid var(--line);
+    border-radius:24px;
+    padding:16px;
+    box-shadow:var(--shadow);
+    margin-bottom:14px;
+  }
+  .card.emphasis{background:linear-gradient(180deg,#ffffff 0%, #fbfdff 100%)}
+  .cardhead{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    margin-bottom:14px;
+    gap:10px;
+  }
+  .lefthead{
+    display:flex;
+    align-items:center;
+    gap:10px;
+  }
+  .mini{
+    width:40px;
+    height:40px;
+    border-radius:14px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    color:#fff;
+    font-size:18px;
+    font-weight:700;
+    flex:0 0 auto;
+  }
+  .mini.blue{background:linear-gradient(135deg,var(--primary),var(--primary-2))}
+  .mini.green{background:linear-gradient(135deg,#14b86a,#2fd18b)}
+  .mini.violet{background:linear-gradient(135deg,#7c4dff,#9c7cff)}
+  .mini.orange{background:linear-gradient(135deg,#ff8a3d,#ffb067)}
+  .mini.red{background:linear-gradient(135deg,#e8505b,#ff7d87)}
+  .cardhead h2{
+    margin:0;
+    font-size:18px;
+  }
+  .hint{
+    font-size:12px;
+    color:var(--muted);
+    font-weight:700;
+  }
+  .grid2,.grid3,.stats{
+    display:grid;
+    gap:12px;
+  }
+  .grid2{grid-template-columns:1fr 1fr}
+  .grid3{grid-template-columns:1fr 1fr}
+  .field label{min-height:28px}
+  .card{padding:14px}
+  .input{padding:11px 12px}
+  .stat .value{font-size:26px}
+  .field label{
+    display:block;
+    margin-bottom:6px;
+    font-size:11px;
+    text-transform:uppercase;
+    letter-spacing:.05em;
+    color:var(--muted);
+    font-weight:700;
+  }
+  .input{
+    width:100%;
+    background:var(--surface-2);
+    border:1px solid var(--line);
+    border-radius:18px;
+    padding:13px 14px;
+    font-size:15px;
+    outline:none;
+    color:var(--text);
+  }
+  .input:focus{border-color:var(--primary);background:#fff}
+  .stats{grid-template-columns:1fr 1fr}
+  .stat{
+    border-radius:22px;
+    border:1px solid var(--line);
+    padding:15px;
+    background:var(--surface-2);
+  }
+  .stat .label{
+    font-size:11px;
+    text-transform:uppercase;
+    letter-spacing:.05em;
+    color:var(--muted);
+    font-weight:700;
+    margin-bottom:8px;
+  }
+  .stat .value{
+    font-size:30px;
+    line-height:1;
+    font-weight:800;
+  }
+  .stat.blue-t{background:#edf5ff}
+  .stat.green-t{background:#eefbf4}
+  .stat.violet-t{background:#f3efff}
+  .stat.orange-t{background:#fff5ec}
+  .stat.red-t{background:#fff3f4}
+  .full{grid-column:1 / -1}
+  .hero-metric{
+    margin-top:14px;
+    border-radius:24px;
+    padding:18px;
+    color:#fff;
+    background:linear-gradient(135deg,#0b4d89 0%, #1b6fbe 100%);
+    box-shadow:0 16px 30px rgba(14,94,168,.22);
+  }
+  .hero-metric .label{
+    font-size:12px;
+    text-transform:uppercase;
+    letter-spacing:.05em;
+    opacity:.82;
+    margin-bottom:10px;
+    font-weight:700;
+  }
+  .hero-metric .value{
+    font-size:38px;
+    line-height:1;
+    font-weight:800;
+  }
+  .subrow{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:12px;
+    margin-top:12px;
+  }
+  .subbox{
+    background:#fff;
+    color:var(--text);
+    border-radius:18px;
+    padding:14px;
+  }
+  .subbox .slabel{
+    font-size:11px;
+    color:var(--muted);
+    text-transform:uppercase;
+    font-weight:700;
+    margin-bottom:7px;
+  }
+  .subbox .svalue{
+    font-size:24px;
+    font-weight:800;
+  }
+  .contact{
+    background:linear-gradient(135deg,#eef5ff,#f9fbff);
+    border:1px solid #dce8f7;
+    border-radius:22px;
+    padding:18px;
+  }
+  .contact .small{
+    font-size:12px;
+    color:var(--muted);
+    margin-bottom:6px;
+  }
+  .contact .name{
+    font-size:20px;
+    font-weight:800;
+    margin-bottom:8px;
+  }
+  .contact .mail{
+    color:var(--primary);
+    font-weight:700;
+    font-size:14px;
+    word-break:break-word;
+  }
+  .bottomnav{
+    position:fixed;
+    left:50%;
+    transform:translateX(-50%);
+    bottom:10px;
+    width:min(452px, calc(100vw - 20px));
+    background:rgba(255,255,255,.96);
+    border:1px solid var(--line);
+    border-radius:24px;
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    padding:10px 8px 12px;
+    backdrop-filter:blur(8px);
+    box-shadow:0 12px 30px rgba(16,24,40,.10);
+    z-index:10;
+  }
+  .navitem{
+    text-align:center;
+    color:#7b8797;
+    font-size:11px;
+    font-weight:700;
+    cursor:pointer;
+  }
+  .navitem .nicon{
+    display:block;
+    font-size:18px;
+    margin-bottom:4px;
+  }
+  .navitem.active{color:var(--primary)}
+  
+  .stepper{
+    display:grid;
+    grid-template-columns:44px 1fr 44px;
+    gap:8px;
+    align-items:center;
+  }
+  .stepper-btn{
+    height:44px;
+    border:none;
+    border-radius:14px;
+    background:linear-gradient(135deg,var(--primary),var(--primary-2));
+    color:#fff;
+    font-size:24px;
+    font-weight:700;
+    cursor:pointer;
+    box-shadow:0 10px 20px rgba(14,94,168,.16);
+    transition:transform .12s ease, box-shadow .12s ease, opacity .12s ease;
+  }
+  .stepper-btn:hover{transform:translateY(-1px)}
+  .stepper-btn:active{transform:scale(.97)}
+  .stepper-btn.minus{
+    background:linear-gradient(135deg,#7d8da1,#98a7ba);
+    box-shadow:0 10px 20px rgba(77,93,117,.14);
+  }
+  .stepper .input{
+    text-align:center;
+    font-weight:700;
+  }
+
+  
+  .risk{
+    margin-top:12px;
+    border-radius:18px;
+    padding:14px;
+    font-size:13px;
+    font-weight:700;
+    border:1px solid var(--line);
+    background:#f8fbff;
+    color:var(--text);
+  }
+  .risk.safe{background:#eefbf4;border-color:#cfeedd;color:#0f7a47}
+  .risk.tight{background:#fff8ec;border-color:#ffe1b9;color:#9a5a00}
+  .risk.risk-high{background:#fff3f4;border-color:#ffcbd1;color:#b4232d}
+
+  @media (max-width:430px){
+    .stats,.subrow{grid-template-columns:1fr}
+    .full{grid-column:auto}
+    .floating-cards{grid-template-columns:1fr}
+    .hero h1{font-size:24px}
+    .hero-metric .value{font-size:32px}
+    .cardhead{align-items:flex-start;flex-direction:column}
+  }
+  @media (max-width:340px){
+    .grid2,.grid3{grid-template-columns:1fr}
+  }
+</style>
+</head>
+<body>
+<div class="app">
+
+  <div id="homeScreen" class="screen active">
+    <div class="hero">
+      <div class="topline">
+        <div class="brand">
+          <div class="appmark">🫁</div>
+          <div>
+            <div class="soft">Respiratory Workforce Platform</div>
+            <h1>RT Staffing Tool</h1>
+          </div>
+        </div>
+        
+      </div>
+      <p>Professional respiratory therapy workforce calculators designed for hospital staffing decisions with clean navigation and a premium card-based mobile experience.</p>
+    </div>
+
+    <div class="floating-cards">
+      <div class="quick" onclick="showScreen('rosterScreen')">
+        <div class="icon blue">📅</div>
+        <h3>6-Week Roster</h3>
+        <p>Shift planning, leave impact, shortage visibility, and workforce requirement.</p>
+      </div>
+      <div class="quick" onclick="showScreen('capacityScreen')">
+        <div class="icon green">🏥</div>
+        <h3>Capacity Staffing</h3>
+        <p>Bed-based staffing, FTE logic, CCRT support, and total workforce output.</p>
+      </div>
+    </div>
+  </div>
+
+  <div id="rosterScreen" class="screen">
+    <div class="hero">
+      <div class="topline">
+        <div class="brand">
+          <div class="appmark">📅</div>
+          <div>
+            <div class="soft">6-Week Workforce Planning</div>
+            <h1>Roster Calculator</h1>
+          </div>
+        </div>
+        <div class="tag">Shift based</div>
+      </div>
+      <p>Inputs grouped clearly at the top, with operational and workforce results highlighted below.</p>
+    </div>
+
+    <div class="card emphasis">
+      <div class="cardhead">
+        <div class="lefthead">
+          <div class="mini blue">👥</div>
+          <h2>Staffing Inputs</h2>
+        </div>
+      </div>
+      <div class="grid2">
+        <div class="field"><label>Day Shift Required Staff</label><input class="input" id="r_day"></div>
+        <div class="field"><label>Night Shift Required Staff</label><input class="input" id="r_night"></div>
+        <div class="field"><label>CCRT Adult Day</label><input class="input" id="r_ccrt_adult_day"></div>
+        <div class="field"><label>CCRT Adult Night</label><input class="input" id="r_ccrt_adult_night"></div>
+        <div class="field"><label>CCRT Pediatric Day</label><input class="input" id="r_ccrt_pedia_day"></div>
+        <div class="field"><label>CCRT Pediatric Night</label><input class="input" id="r_ccrt_pedia_night"></div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="cardhead">
+        <div class="lefthead">
+          <div class="mini green">⏱️</div>
+          <h2>Working Hours</h2>
+        </div>
+        <div class="hint">Shift length fixed in backend</div>
+      </div>
+      <input id="r_shift" type="hidden" value="12">
+      <div class="grid2">
+        <div class="field"><label>Regular Weekly Hours</label><input class="input" id="r_regular" value="46"></div>
+        <div class="field"><label>Ramadan Weekly Hours</label><input class="input" id="r_ramadanW" value="32"></div>
+        <div class="field"><label>Ramadan Days in This Period</label><input class="input" id="r_ramadanD"></div>
+        <div class="field"><label>Available Staff</label><input class="input" id="r_available"></div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="cardhead">
+        <div class="lefthead">
+          <div class="mini orange">🗓️</div>
+          <h2>Leave Assumptions</h2>
+        </div>
+      </div>
+      <div class="grid2">
+        <div class="field"><label>Total Annual Leave Shifts</label><input class="input" id="r_annual"></div>
+        <div class="field"><label>Total Eid Holiday Shifts</label><input class="input" id="r_eid"></div>
+        <div class="field"><label>Total National Day Shifts</label><input class="input" id="r_national"></div>
+        <div class="field"><label>Total Founding Day Shifts</label><input class="input" id="r_foundation"></div>
+        <div class="field"><label>Total Professional Leave Shifts</label><input class="input" id="r_professional"></div>
+        <div class="field"><label>Total Educational Day Shifts</label><input class="input" id="r_educational"></div>
+        <div class="field"><label>Total Sick Leave Shifts</label><input class="input" id="r_sick"></div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="cardhead">
+        <div class="lefthead">
+          <div class="mini blue">📊</div>
+          <h2>Shift Results</h2>
+        </div>
+      </div>
+      <div class="stats">
+        <div class="stat blue-t">
+          <div class="label">Day Required Shifts</div>
+          <div class="value" id="r_dayRequiredShifts">0</div>
+        </div>
+        <div class="stat blue-t">
+          <div class="label">Night Required Shifts</div>
+          <div class="value" id="r_nightRequiredShifts">0</div>
+        </div>
+      </div>
+      <div class="hero-metric">
+        <div class="label">Final Required Headcount</div>
+        <div class="value" id="r_finalHeadcount">0</div>
+        <div class="subrow">
+          <div class="subbox">
+            <div class="slabel">Total Required Shifts</div>
+            <div class="svalue" id="r_requiredShifts">0</div>
+          </div>
+          <div class="subbox">
+            <div class="slabel">Shift Gap</div>
+            <div class="svalue" id="r_shiftGap">0.00</div>
+          </div>
+        </div>
+      </div>
+      <div class="stats" style="margin-top:12px">
+        <div class="stat green-t">
+          <div class="label">Gross Shifts / Staff</div>
+          <div class="value" id="r_grossShifts">0.00</div>
+        </div>
+        <div class="stat orange-t">
+          <div class="label">Net Workforce Shifts</div>
+          <div class="value" id="r_netWorkforceShifts">0.00</div>
+        </div>
+      </div>
+      <div class="stats" style="margin-top:12px">
+        <div class="stat violet-t full">
+          <div class="label">Calculated Staffing Need</div>
+          <div class="value" id="r_calcNeed">0.00</div>
+        </div>
+      </div>
+      <div id="r_riskBox" class="risk safe">Enter values to calculate.</div>
+      <div id="adRoster" style="display:none;margin-top:20px;text-align:center;opacity:.96"><ins class="adsbygoogle" style="display:block;max-width:100%;" data-ad-client="ca-pub-2515403925309471" data-ad-slot="1234567890" data-ad-format="auto" data-full-width-responsive="true"></ins></div>
+    </div>
+  </div>
+
+  <div id="capacityScreen" class="screen">
+    <div class="hero">
+      <div class="topline">
+        <div class="brand">
+          <div class="appmark">🏥</div>
+          <div>
+            <div class="soft">Hospital Capacity Workforce</div>
+            <h1>Capacity Staffing</h1>
+          </div>
+        </div>
+        <div class="tag">Beds + FTE</div>
+      </div>
+      <p>Bed-based staffing with FTE logic, CCRT support, supervisory roles, and additional workforce positions.</p>
+    </div>
+
+    <div class="card emphasis">
+      <div class="cardhead">
+        <div class="lefthead">
+          <div class="mini green">🛏️</div>
+          <h2>Capacity Inputs</h2>
+        </div>
+      </div>
+      <div class="grid2">
+        <div class="field"><label>ICU Beds</label><input class="input" id="c_icuBeds"></div>
+        <div class="field"><label>Critical ER Beds</label><input class="input" id="c_criticalErBeds"></div>
+        <div class="field"><label>Ward Beds</label><input class="input" id="c_wardBeds"></div>
+        <div class="field"><label>Non-Critical ER Beds</label><input class="input" id="c_quietErBeds"></div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="cardhead">
+        <div class="lefthead">
+          <div class="mini violet">⚖️</div>
+          <h2>Ratios & FTE</h2>
+        </div>
+      </div>
+      <div class="grid2">
+        <div class="field"><label>Critical Ratio (Beds per RT)</label><input class="input" id="c_criticalRatio" value="5"></div>
+        <div class="field"><label>General Ratio (Beds per RT)</label><input class="input" id="c_generalRatio" value="50"></div>
+        <div class="field"><label>Regular Weekly Hours</label><input class="input" id="c_regularWeekly" value="48"></div>
+        <div class="field"><label>Ramadan Weekly Hours</label><input class="input" id="c_ramadanWeekly" value="36"></div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="cardhead">
+        <div class="lefthead">
+          <div class="mini red">📚</div>
+          <h2>Annual Leave Assumptions</h2>
+        </div>
+      </div>
+      <div class="grid2">
+        <div class="field"><label>Annual Leave</label><input class="input" id="c_annualLeaveDays" value="30"></div>
+        <div class="field"><label>Eid Holidays</label><input class="input" id="c_eidLeaveDays" value="10"></div>
+        <div class="field"><label>National Day</label><input class="input" id="c_nationalDayDays" value="1"></div>
+        <div class="field"><label>Founding Day</label><input class="input" id="c_foundingDayDays" value="1"></div>
+        <div class="field"><label>Professional Development</label><input class="input" id="c_professionalDays" value="3"></div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="cardhead">
+        <div class="lefthead">
+          <div class="mini orange">➕</div>
+          <h2>Additional Workforce Inputs</h2>
+        </div>
+      </div>
+      <div class="grid2">
+        <div class="field"><label>CCRT Staff Count</label><input class="input" id="c_ccrtStaffCount"></div>
+        <div class="field"><label>Heads / Chairperson Count</label><input class="input" id="c_headsCount"></div>
+        <div class="field"><label>Administrative Support Count</label><input class="input" id="c_adminSupportCount"></div>
+        <div class="field"><label>Clinical Educators Count</label><input class="input" id="c_educatorsCount"></div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="cardhead">
+        <div class="lefthead">
+          <div class="mini blue">📐</div>
+          <h2>Key Metrics</h2>
+        </div>
+      </div>
+      <div class="stats">
+        <div class="stat blue-t">
+          <div class="label">Critical RT / Shift</div>
+          <div class="value" id="c_criticalPerShift">0</div>
+        </div>
+        <div class="stat blue-t">
+          <div class="label">General RT / Shift</div>
+          <div class="value" id="c_generalPerShift">0</div>
+        </div>
+        <div class="stat green-t">
+          <div class="label">Annual Hours / Staff</div>
+          <div class="value" id="c_netAnnualHours">0.00</div>
+        </div>
+        <div class="stat orange-t">
+          <div class="label">FTE Factor</div>
+          <div class="value" id="c_fteFactor">0.00</div>
+        </div>
+        <div class="stat red-t">
+          <div class="label">CCRT Workforce</div>
+          <div class="value" id="c_ccrtWorkforce">0</div>
+        </div>
+        <div class="stat orange-t">
+          <div class="label">Base Workforce</div>
+          <div class="value" id="c_baseWorkforce">0</div>
+        </div>
+      </div>
+
+      <div class="hero-metric">
+        <div class="label">Final Total Workforce Required</div>
+        <div class="value" id="c_totalWorkforce">0</div>
+        <div id="adCapacity" style="display:none;margin-top:20px;text-align:center;opacity:.96"><ins class="adsbygoogle" style="display:block;max-width:100%;" data-ad-client="ca-pub-2515403925309471" data-ad-slot="1234567890" data-ad-format="auto" data-full-width-responsive="true"></ins></div>
+        <div class="subrow">
+          <div class="subbox">
+            <div class="slabel">Total Supervisors</div>
+            <div class="svalue" id="c_totalSupervisors">0</div>
+          </div>
+          <div class="subbox">
+            <div class="slabel">Heads / Chairperson</div>
+            <div class="svalue" id="c_headsDisplay">0</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="stats" style="margin-top:12px">
+        <div class="stat orange-t">
+          <div class="label">ICU Supervisors</div>
+          <div class="value" id="c_icuSupervisors">0</div>
+        </div>
+        <div class="stat orange-t">
+          <div class="label">Ward Supervisors</div>
+          <div class="value" id="c_wardSupervisors">0</div>
+        </div>
+        <div class="stat orange-t">
+          <div class="label">Administrative Support</div>
+          <div class="value" id="c_adminDisplay">0</div>
+        </div>
+        <div class="stat orange-t">
+          <div class="label">Clinical Educators</div>
+          <div class="value" id="c_educatorsDisplay">0</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="aboutScreen" class="screen">
+    <div class="hero">
+      <div class="topline">
+        <div class="brand">
+          <div class="appmark">ℹ️</div>
+          <div>
+            <div class="soft">About This Project</div>
+            <h1>Contact & Support</h1>
+          </div>
+        </div>
+        <div class="tag">Support</div>
+      </div>
+      <p>For questions, updates, or enhancement requests, use the support details below.</p>
+    </div>
+
+    <div class="contact">
+      <div class="small">Developed by</div>
+      <div class="name">Abdulraheem AlZahrani</div>
+      <div class="small">Support Email</div>
+      <div class="mail">aajalzahrani7@gmail.com</div>
+      <div style="margin-top:10px"><a href="./privacy.html" style="color:#0e5ea8;font-weight:700;text-decoration:none">Privacy Policy</a></div>
+    </div>
+  </div>
+
+</div>
+
+<div class="bottomnav">
+  <div class="navitem active" data-target="homeScreen" onclick="showScreen('homeScreen', this)">
+    <span class="nicon">🏠</span>Home
+  </div>
+  <div class="navitem" data-target="rosterScreen" onclick="showScreen('rosterScreen', this)">
+    <span class="nicon">📅</span>Roster
+  </div>
+  <div class="navitem" data-target="capacityScreen" onclick="showScreen('capacityScreen', this)">
+    <span class="nicon">🏥</span>Capacity
+  </div>
+  <div class="navitem" data-target="aboutScreen" onclick="showScreen('aboutScreen', this)">
+    <span class="nicon">ℹ️</span>About
+  </div>
+</div>
+
+<script>
+function byId(id){ return document.getElementById(id); }
+function num(v){
+  const n = Number(v);
+  return Number.isFinite(n) ? n : 0;
+}
+function fmt(n, d=1){
+  return Number(n || 0).toLocaleString(undefined,{
+    minimumFractionDigits:d,
+    maximumFractionDigits:d
+  });
+}
+function ceilSafe(n){
+  if (!Number.isFinite(n) || n <= 0) return 0;
+  return Math.ceil(n);
+}
+function sanitizeInput(el){
+  el.value = el.value.replace(/[^0-9.]/g, "");
+  const parts = el.value.split(".");
+  if (parts.length > 2) el.value = parts[0] + "." + parts.slice(1).join("");
+}
+function showScreen(id, navEl){
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+  byId(id).classList.add('active');
+  document.querySelectorAll('.navitem').forEach(n=>n.classList.remove('active'));
+  if(navEl){
+    navEl.classList.add('active');
+  }else{
+    const target = document.querySelector('.navitem[data-target="'+id+'"]');
+    if(target) target.classList.add('active');
+  }
+}
+function initializeApp(){
+  document.querySelectorAll('input').forEach(el=>{
+    el.addEventListener('input', ()=>{
+      sanitizeInput(el);
+      calculateRoster();
+      calculateCapacity();
+    });
+  });
+  document.querySelectorAll('.quick').forEach((el, idx)=>{
+    el.addEventListener('click', ()=>{
+      if(idx===0) showScreen('rosterScreen');
+      if(idx===1) showScreen('capacityScreen');
+    });
+  });
+  enhanceNumericInputs();
+  calculateRoster();
+  calculateCapacity();
+}
+document.addEventListener('DOMContentLoaded', initializeApp);
+
+function showAd(id){
+  const ad = document.getElementById(id);
+  if(!ad) return;
+  if(ad.style.display === "none"){
+    ad.style.display = "block";
+    try{ (window.adsbygoogle = window.adsbygoogle || []).push({}); }catch(e){}
+  }
+}
+
+function calculateRoster(){
+  const day = num(byId("r_day").value);
+  const night = num(byId("r_night").value);
+  const ccrtAdultDay = num(byId("r_ccrt_adult_day").value);
+  const ccrtAdultNight = num(byId("r_ccrt_adult_night").value);
+  const ccrtPediaDay = num(byId("r_ccrt_pedia_day").value);
+  const ccrtPediaNight = num(byId("r_ccrt_pedia_night").value);
+  const shift = num(byId("r_shift").value) || 12;
+  const regular = num(byId("r_regular").value);
+  const ramadanW = num(byId("r_ramadanW").value);
+  const ramadanD = Math.min(Math.max(num(byId("r_ramadanD").value), 0), 42);
+  const annual = num(byId("r_annual").value);
+  const eid = num(byId("r_eid").value);
+  const national = num(byId("r_national").value);
+  const foundation = num(byId("r_foundation").value);
+  const professional = num(byId("r_professional").value);
+  const educational = num(byId("r_educational").value);
+  const sick = num(byId("r_sick").value);
+  const availableStaff = num(byId("r_available").value);
+  const period = 42;
+
+  const regularDays = Math.max(period - ramadanD, 0);
+  const regularDailyHours = regular / 7;
+  const ramadanDailyHours = ramadanW / 7;
+  const dayRequiredStaff = day + ccrtAdultDay + ccrtPediaDay;
+  const nightRequiredStaff = night + ccrtAdultNight + ccrtPediaNight;
+  const dayRequiredShifts = dayRequiredStaff * period;
+  const nightRequiredShifts = nightRequiredStaff * period;
+  const requiredShifts = dayRequiredShifts + nightRequiredShifts;
+
+  const grossHoursPerStaff = (regularDays * regularDailyHours) + (ramadanD * ramadanDailyHours);
+  const grossShiftsPerStaff = shift > 0 ? grossHoursPerStaff / shift : 0;
+  const totalLeaveShifts = annual + eid + national + foundation + professional + educational + sick;
+  const grossWorkforceShifts = availableStaff * grossShiftsPerStaff;
+  const netWorkforceShifts = Math.max(grossWorkforceShifts - totalLeaveShifts, 0);
+  const calcNeed = grossShiftsPerStaff > 0 ? (requiredShifts + totalLeaveShifts) / grossShiftsPerStaff : 0;
+  const finalHeadcount = ceilSafe(calcNeed);
+  const shiftGap = netWorkforceShifts - requiredShifts;
+
+  let riskText = "Enter values to calculate.";
+  let riskClass = "safe";
+  if (requiredShifts > 0 || availableStaff > 0) {
+    if (shiftGap < 0) { riskText = "High Risk: staffing shortage detected."; riskClass = "risk-high"; }
+    else if (shiftGap <= Math.max(5, requiredShifts * 0.02)) { riskText = "Tight Coverage: very limited shift buffer."; riskClass = "tight"; }
+    else { riskText = "Safe Coverage: available workforce exceeds operational need."; riskClass = "safe"; }
+  }
+
+  byId("r_dayRequiredShifts").textContent = fmt(dayRequiredShifts,0);
+  byId("r_nightRequiredShifts").textContent = fmt(nightRequiredShifts,0);
+  byId("r_requiredShifts").textContent = fmt(requiredShifts,0);
+  byId("r_grossShifts").textContent = fmt(grossShiftsPerStaff,2);
+  byId("r_netWorkforceShifts").textContent = fmt(netWorkforceShifts,2);
+  byId("r_calcNeed").textContent = fmt(calcNeed,2);
+  byId("r_finalHeadcount").textContent = String(finalHeadcount);
+  byId("r_shiftGap").textContent = (shiftGap >= 0 ? "+" : "") + fmt(shiftGap,2);
+  if(requiredShifts > 0) showAd("adRoster");
+
+  const riskBox = byId("r_riskBox");
+  riskBox.className = "risk " + riskClass;
+  riskBox.textContent = riskText;
+}
+
+function calculateCapacity(){
+  const icuBeds = num(byId("c_icuBeds").value);
+  const criticalErBeds = num(byId("c_criticalErBeds").value);
+  const wardBeds = num(byId("c_wardBeds").value);
+  const quietErBeds = num(byId("c_quietErBeds").value);
+  const criticalRatio = num(byId("c_criticalRatio").value);
+  const generalRatio = num(byId("c_generalRatio").value);
+  const regularWeekly = num(byId("c_regularWeekly").value);
+  const ramadanWeekly = num(byId("c_ramadanWeekly").value);
+  const annualLeave = num(byId("c_annualLeaveDays").value);
+  const eidLeave = num(byId("c_eidLeaveDays").value);
+  const nationalDay = num(byId("c_nationalDayDays").value);
+  const foundingDay = num(byId("c_foundingDayDays").value);
+  const professionalDays = num(byId("c_professionalDays").value);
+  const ccrtStaffCount = num(byId("c_ccrtStaffCount").value);
+  const headsCount = num(byId("c_headsCount").value);
+  const adminSupportCount = num(byId("c_adminSupportCount").value);
+  const educatorsCount = num(byId("c_educatorsCount").value);
+
+  const criticalBedsTotal = icuBeds + criticalErBeds;
+  const generalBedsTotal = wardBeds + quietErBeds;
+  const criticalPerShift = criticalRatio > 0 ? Math.ceil(criticalBedsTotal / criticalRatio) : 0;
+  const generalPerShift = generalRatio > 0 ? Math.ceil(generalBedsTotal / generalRatio) : 0;
+
+  const ramadanDays = 30;
+  const nonRamadanDays = 365 - ramadanDays;
+  const annualHoursBeforeLeave = (nonRamadanDays * (regularWeekly / 7)) + (ramadanDays * (ramadanWeekly / 7));
+  const totalLeaveDays = annualLeave + eidLeave + nationalDay + foundingDay + professionalDays;
+  const leaveHours = totalLeaveDays * (regularWeekly / 7);
+  const netAnnualHours = Math.max(annualHoursBeforeLeave - leaveHours, 0);
+  const fteFactor = netAnnualHours > 0 ? 8760 / netAnnualHours : 0;
+
+  const totalPerShift = criticalPerShift + generalPerShift;
+  const baseWorkforce = Math.ceil(totalPerShift * fteFactor);
+  const ccrtWorkforce = Math.ceil(ccrtStaffCount * fteFactor);
+  const icuSupervisors = Math.ceil(icuBeds / 15);
+  const wardSupervisors = Math.ceil(wardBeds / 300);
+  const totalSupervisors = icuSupervisors + wardSupervisors;
+  const totalWorkforce = baseWorkforce + ccrtWorkforce + totalSupervisors + headsCount + adminSupportCount + educatorsCount;
+
+  byId("c_criticalPerShift").textContent = String(criticalPerShift);
+  byId("c_generalPerShift").textContent = String(generalPerShift);
+  byId("c_netAnnualHours").textContent = fmt(netAnnualHours,2);
+  byId("c_fteFactor").textContent = fmt(fteFactor,2);
+  byId("c_ccrtWorkforce").textContent = String(ccrtWorkforce);
+  byId("c_baseWorkforce").textContent = String(baseWorkforce);
+  byId("c_totalSupervisors").textContent = String(totalSupervisors);
+  byId("c_icuSupervisors").textContent = String(icuSupervisors);
+  byId("c_wardSupervisors").textContent = String(wardSupervisors);
+  byId("c_headsDisplay").textContent = String(headsCount);
+  byId("c_adminDisplay").textContent = String(adminSupportCount);
+  byId("c_educatorsDisplay").textContent = String(educatorsCount);
+  byId("c_totalWorkforce").textContent = String(totalWorkforce);
+  if(totalWorkforce > 0) showAd("adCapacity");
+}
+
+
+function enhanceNumericInputs(){
+  document.querySelectorAll('input.input').forEach(input=>{
+    if(input.dataset.enhanced === '1') return;
+    input.dataset.enhanced = '1';
+    input.setAttribute('inputmode','decimal');
+    const wrapper = document.createElement('div');
+    wrapper.className = 'stepper';
+
+    const minus = document.createElement('button');
+    minus.type = 'button';
+    minus.className = 'stepper-btn minus';
+    minus.textContent = '−';
+
+    const plus = document.createElement('button');
+    plus.type = 'button';
+    plus.className = 'stepper-btn plus';
+    plus.textContent = '+';
+
+    const parent = input.parentNode;
+    parent.insertBefore(wrapper, input);
+    wrapper.appendChild(minus);
+    wrapper.appendChild(input);
+    wrapper.appendChild(plus);
+
+    const stepValue = () => {
+      const v = Number(input.value || 0);
+      return Number.isInteger(v) ? 1 : 0.5;
+    };
+
+    minus.addEventListener('click', ()=>{
+      const next = Math.max(0, (Number(input.value)||0) - stepValue());
+      input.value = String(next);
+      input.dispatchEvent(new Event('input', {bubbles:true}));
+    });
+
+    plus.addEventListener('click', ()=>{
+      const next = (Number(input.value)||0) + stepValue();
+      input.value = String(next);
+      input.dispatchEvent(new Event('input', {bubbles:true}));
+    });
+  });
+}
+</script>
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2515403925309471" crossorigin="anonymous"></script>
+</body>
+</html>
