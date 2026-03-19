@@ -4,6 +4,7 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>RT Staffing Tool</title>
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2515403925309471" crossorigin="anonymous"></script>
 <style>
   :root{
     --bg:#eef4fb;
@@ -325,7 +326,6 @@
     margin-bottom:4px;
   }
   .navitem.active{color:var(--primary)}
-  
   .stepper{
     display:grid;
     grid-template-columns:44px 1fr 44px;
@@ -354,8 +354,6 @@
     text-align:center;
     font-weight:700;
   }
-
-  
   .risk{
     margin-top:12px;
     border-radius:18px;
@@ -369,7 +367,6 @@
   .risk.safe{background:#eefbf4;border-color:#cfeedd;color:#0f7a47}
   .risk.tight{background:#fff8ec;border-color:#ffe1b9;color:#9a5a00}
   .risk.risk-high{background:#fff3f4;border-color:#ffcbd1;color:#b4232d}
-
   @media (max-width:430px){
     .stats,.subrow{grid-template-columns:1fr}
     .full{grid-column:auto}
@@ -392,13 +389,12 @@
         <div class="brand">
           <div class="appmark">🫁</div>
           <div>
-            <div class="soft">Respiratory Workforce Platform</div>
-            <h1>RT Staffing Tool</h1>
+            <div class="soft">Respiratory Care Workforce Platform</div>
+            <h1>Staffing Tool</h1>
           </div>
         </div>
-        
       </div>
-      <p>Professional respiratory therapy workforce calculators designed for hospital staffing decisions with clean navigation and a premium card-based mobile experience.</p>
+      <p>Professional respiratory Care workforce calculators designed for hospital staffing decisions.</p>
     </div>
 
     <div class="floating-cards">
@@ -457,10 +453,10 @@
       </div>
       <input id="r_shift" type="hidden" value="12">
       <div class="grid2">
+        <div class="field"><label>Available Staff</label><input class="input" id="r_available"></div>
         <div class="field"><label>Regular Weekly Hours</label><input class="input" id="r_regular" value="46"></div>
         <div class="field"><label>Ramadan Weekly Hours</label><input class="input" id="r_ramadanW" value="32"></div>
         <div class="field"><label>Ramadan Days in This Period</label><input class="input" id="r_ramadanD"></div>
-        <div class="field"><label>Available Staff</label><input class="input" id="r_available"></div>
       </div>
     </div>
 
@@ -478,7 +474,7 @@
         <div class="field"><label>Total Founding Day Shifts</label><input class="input" id="r_foundation"></div>
         <div class="field"><label>Total Professional Leave Shifts</label><input class="input" id="r_professional"></div>
         <div class="field"><label>Total Educational Day Shifts</label><input class="input" id="r_educational"></div>
-        <div class="field"><label>Total Sick Leave Shifts</label><input class="input" id="r_sick"></div>
+        <div class="field"><label>Total Expected Sick Leave Shifts</label><input class="input" id="r_sick"></div>
       </div>
     </div>
 
@@ -530,7 +526,14 @@
         </div>
       </div>
       <div id="r_riskBox" class="risk safe">Enter values to calculate.</div>
-      <div id="adRoster" style="display:none;margin-top:20px;text-align:center;opacity:.96"><ins class="adsbygoogle" style="display:block;max-width:100%;" data-ad-client="ca-pub-2515403925309471" data-ad-slot="7748788886" data-ad-format="auto" data-full-width-responsive="true"></ins></div>
+      <div id="adRoster" style="display:none;margin-top:20px;text-align:center;opacity:.96">
+        <ins class="adsbygoogle"
+             style="display:block;max-width:100%;"
+             data-ad-client="ca-pub-2515403925309471"
+             data-ad-slot="7748788886"
+             data-ad-format="auto"
+             data-full-width-responsive="true"></ins>
+      </div>
     </div>
   </div>
 
@@ -591,7 +594,7 @@
         <div class="field"><label>Eid Holidays</label><input class="input" id="c_eidLeaveDays" value="10"></div>
         <div class="field"><label>National Day</label><input class="input" id="c_nationalDayDays" value="1"></div>
         <div class="field"><label>Founding Day</label><input class="input" id="c_foundingDayDays" value="1"></div>
-        <div class="field"><label>Professional Development</label><input class="input" id="c_professionalDays" value="3"></div>
+        <div class="field"><label>Professional Development Day</label><input class="input" id="c_professionalDays" value="3"></div>
       </div>
     </div>
 
@@ -603,7 +606,7 @@
         </div>
       </div>
       <div class="grid2">
-        <div class="field"><label>CCRT Staff Count</label><input class="input" id="c_ccrtStaffCount"></div>
+        <div class="field"><label>CCRT Staff Count Per Shift</label><input class="input" id="c_ccrtStaffCount"></div>
         <div class="field"><label>Heads / Chairperson Count</label><input class="input" id="c_headsCount"></div>
         <div class="field"><label>Administrative Support Count</label><input class="input" id="c_adminSupportCount"></div>
         <div class="field"><label>Clinical Educators Count</label><input class="input" id="c_educatorsCount"></div>
@@ -647,7 +650,14 @@
       <div class="hero-metric">
         <div class="label">Final Total Workforce Required</div>
         <div class="value" id="c_totalWorkforce">0</div>
-        <div id="adCapacity" style="display:none;margin-top:20px;text-align:center;opacity:.96"><ins class="adsbygoogle" style="display:block;max-width:100%;" data-ad-client="ca-pub-2515403925309471" data-ad-slot="1234567890" data-ad-format="auto" data-full-width-responsive="true"></ins></div>
+        <div id="adCapacity" style="display:none;margin-top:20px;text-align:center;opacity:.96">
+          <ins class="adsbygoogle"
+               style="display:block;max-width:100%;"
+               data-ad-client="ca-pub-2515403925309471"
+               data-ad-slot="7748788886"
+               data-ad-format="auto"
+               data-full-width-responsive="true"></ins>
+        </div>
         <div class="subrow">
           <div class="subbox">
             <div class="slabel">Total Supervisors</div>
@@ -698,7 +708,7 @@
 
     <div class="contact">
       <div class="small">Developed by</div>
-      <div class="name">Abdulraheem AlZahrani</div>
+      <div class="name">Abdulraheem AlZahrani, RRT</div>
       <div class="small">Support Email</div>
       <div class="mail">aajalzahrani7@gmail.com</div>
       <div style="margin-top:10px"><a href="./privacy.html" style="color:#0e5ea8;font-weight:700;text-decoration:none">Privacy Policy</a></div>
@@ -901,7 +911,6 @@ function calculateCapacity(){
   if(totalWorkforce > 0) showAd("adCapacity");
 }
 
-
 function enhanceNumericInputs(){
   document.querySelectorAll('input.input').forEach(input=>{
     if(input.dataset.enhanced === '1') return;
@@ -945,6 +954,5 @@ function enhanceNumericInputs(){
   });
 }
 </script>
-<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2515403925309471" crossorigin="anonymous"></script>
 </body>
 </html>
